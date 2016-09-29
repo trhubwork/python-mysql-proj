@@ -1,5 +1,5 @@
 from flask import Flask, render_template, json, request
-from flask.ext.mysql import MySQL
+from flaskext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
 
 mysql = MySQL()
@@ -8,7 +8,7 @@ app = Flask(__name__)
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'jay'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'jay'
-app.config['MYSQL_DATABASE_DB'] = 'BucketList'
+app.config['MYSQL_DATABASE_DB'] = 'Bucketlist'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -22,7 +22,7 @@ def showSignUp():
     return render_template('signup.html')
 
 
-@app.route('/signUp',methods=['POST','GET'])
+@app.route('/signUp',methods=['POST'])
 def signUp():
     try:
         _name = request.form['inputName']
@@ -31,9 +31,9 @@ def signUp():
 
         # validate the received values
         if _name and _email and _password:
-            
+
             # All Good, let's call MySQL
-            
+
             conn = mysql.connect()
             cursor = conn.cursor()
             _hashed_password = generate_password_hash(_password)
@@ -51,8 +51,8 @@ def signUp():
     except Exception as e:
         return json.dumps({'error':str(e)})
     finally:
-        cursor.close() 
+        cursor.close()
         conn.close()
 
 if __name__ == "__main__":
-    app.run(port=5002)
+    app.run(port=5000)
